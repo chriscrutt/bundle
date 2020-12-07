@@ -24,4 +24,4 @@ def not ready for that yet
 1. create a file called `apis.py`
 2. create the variables `api_key` and `api_secret` and set them to their respective keys inside of that `apis.py` file
 
-Do `python /Path/to/bundle/test.py` to run the file yay
+Do `$ python /Path/to/bundle/test.py` to run the file yay
