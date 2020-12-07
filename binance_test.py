@@ -8,11 +8,11 @@ from apis import api_key, api_secret
 #########################################################
 
 # setting up api keys
-pub: str = api_key
-priv: str = api_secret
+pub = api_key
+priv = api_secret
 
 # importing binance client
-from binance.client import Client  # @ignore
+from binance.client import Client
 
 client = Client(api_key, api_secret)
 
