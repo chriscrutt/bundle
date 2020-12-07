@@ -11,8 +11,9 @@ def not ready for that yet
 
 ## Mini Tut
 ### for test.py
-1. Delete the first line as it lets the author/committers to put API keys on a seperate file so y'all don't go hacking into our accounts
+1. Delete the first 5 lines as they let the author/committers put API keys on a seperate file so y'all don't go hacking into our accounts
 2. replace `api_key` and `api_secret` with your... api keys from Binance
-or (alternative)
+
+**or (alternative)**
 1. create a file called `apis.py`
 2. create the variables `api_key` and `api_secret` and set them to their respective keys inside of that `apis.py` file
