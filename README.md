@@ -10,5 +10,6 @@ We use fancy API technology oooh aaah and our functions are programmed by a 19 y
 def not ready for that yet
 
 ## Mini Tut
+### for test.py
 1. Delete the top four lines as they let the authors/committers to put API keys on a seperate file so y'all don't go hacking into our accounts
-2. On lines 6 and 7 use your public and private keys from Binance
+2. replace `public_key` and `private_key` with your... public and private keys from Binance

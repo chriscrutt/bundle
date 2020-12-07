@@ -1,9 +1,15 @@
 #########################################################
 # gives author aditional privacy when commiting- delete #
-from apis import public_key, private_key                #
+from apis import api_key, api_secret  #
 #########################################################
 
-pub = public_key
-priv = private_key
+from binance.client import Client
 
-print(pub, priv)
+pub = api_key
+priv = api_secret
+
+client = Client(api_key, api_secret)
+
+time_res = client.get_server_time()
+
+print(time_res)
