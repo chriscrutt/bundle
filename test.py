@@ -4,7 +4,7 @@ from apis import api_key, api_secret  #
 #########################################################
 
 # Allowing for type hints cause why not
-from typing import Optional, List
+from typing import List
 
 # setting up api keys
 pub: str = api_key
@@ -44,15 +44,17 @@ print("average price WBTC/BTC:", avg_price["price"])
 tickers = client.get_klines(symbol="WBTCBTC", interval="1d", limit="21")
 
 
-# creating an array for all highs and lows of candles
+# creating an array for all highs and lows of candles, as well as volume
 high: List[float] = []
 low: List[float] = []
+volume: List[float] = []
 
 
-# appends highs and lows of candles to respective arrays
+# appends highs and lows of candles to respective arrays, as well as volume
 for candle in tickers:
     high.append(float(candle[2]))
     low.append(float(candle[3]))
+    volume.append(float(candle[5]))
 
 
 # finds average highs and lows
@@ -78,3 +80,52 @@ highMedian = round(my_median(high) * 100000) / 100000
 lowMedian = round(my_median(low) * 100000) / 100000
 
 print("21 day median high:", highMedian, "| 21 day median low:", lowMedian)
+
+
+# 21 day volume
+print("21 day volume in WBTC of WBTC/BTC:", sum(volume))
+
+
+#########################################################
+
+
+# getting daily BTC candles from past 12 months
+btc_tickers = client.get_klines(symbol="BTCUSDT", interval="1M", limit="12")
+
+# creating an array for all highs and lows of candles, as well as volume
+btc_volume: List[float] = []
+
+# appends volumes to array
+for btc_candle in btc_tickers:
+    btc_volume.append(float(btc_candle[5]))
+
+# 12 month volume
+print("\n12 month volume in BTC of BTC/USDT:", sum(btc_volume))
+
+
+#########################################################
+
+
+# getting total depth of all orders of given ticker (up to 5000)
+depth = client.get_order_book(symbol="BTCUSDT", limit=5000)
+
+
+# setting up lists for all bids and asks
+bids: List[float] = []
+asks: List[float] = []
+
+
+# calculating bid order market cap
+for bid in depth["bids"]:
+    bids.append(float(bid[1]))
+
+print("\ncurrent ask market cap of BTC/USDT:", str(sum(bids)))
+
+
+# calculating ask order market cap
+for ask in depth["asks"]:
+    asks.append(float(ask[1]))
+
+print("current bid market cap of BTC/USDT:", sum(asks))
+
+# print("\ndepth:", depth)
