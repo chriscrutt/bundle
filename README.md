@@ -11,7 +11,7 @@ def not ready for that yet
 
 ## Mini Tut
 ### Prerequisites
-1. get python 3 and git - figure it out yourself
+1. get python 3 (git optional) - figure it out yourself
 2. do `$ python --version` and if you see it's not python 3 then substitute `python` and `pip` with `python3` and `pip3` respectively
 3. either download the zip or clone this repo onto your computer
 4. do `$ pip install python-binance`
