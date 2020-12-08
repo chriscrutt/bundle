@@ -1,9 +1,12 @@
-#This example uses Python 2.7 and the python-request library.
+#########################################################
+# gives author aditional privacy when commiting- delete #
+# Allowing for type hints cause why not                 #
+from apis import cmc_key                                #
+#########################################################
 
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
-from apis import cmc_key
 from date_format import convert_date
 
 parameters = {
@@ -13,7 +16,9 @@ parameters = {
     "aux": "cmc_rank,volume_7d,volume_30d"
 }
 
-headers = {"Accepts": "application/json", "X-CMC_PRO_API_KEY": cmc_key}
+api_key = cmc_key
+
+headers = {"Accepts": "application/json", "X-CMC_PRO_API_KEY": api_key}
 
 session = Session()
 session.headers.update(headers)

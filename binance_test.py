@@ -1,13 +1,12 @@
 #########################################################
 # gives author aditional privacy when commiting- delete #
-# Allowing for type hints cause why not
-from typing import List
-
-from apis import api_key, api_secret
-
+# Allowing for type hints cause why not                 #
+from apis import api_key, api_secret                    #
 #########################################################
 
-from date_format import convert_date
+# for type hints
+from typing import List
+
 # setting up api keys
 pub = api_key
 priv = api_secret
@@ -15,7 +14,7 @@ priv = api_secret
 # importing binance client
 from binance.client import Client
 
-client = Client(api_key, api_secret)
+client = Client(pub, priv)
 
 # importing date for a readable server time
 from datetime import datetime
@@ -24,6 +23,9 @@ time_res = client.get_server_time()
 
 serv = datetime.utcfromtimestamp(time_res["serverTime"] /
                                  1000).strftime("%Y-%m-%d %H:%M:%S")
+
+# to format the date we get from the server
+from date_format import convert_date
 
 print("server time:", convert_date(serv))
 
