@@ -24,7 +24,7 @@ time_res = client.get_server_time()
 print(
     "server time:",
     datetime.utcfromtimestamp(time_res["serverTime"] /
-                              1000).strftime('%Y-%m-%d %H:%M:%S'))
+                              1000).strftime("%Y-%m-%d %H:%M:%S"))
 
 # seeing if server is running
 status = client.get_system_status()
@@ -32,7 +32,7 @@ status = client.get_system_status()
 print("server status:", status["msg"])
 
 # pulling (average) price of ticker
-avg_price = client.get_avg_price(symbol='WBTCBTC')
+avg_price = client.get_avg_price(symbol="WBTCBTC")
 
 print("average price WBTC/BTC:", avg_price["price"])
 
