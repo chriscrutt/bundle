@@ -7,6 +7,7 @@ from apis import api_key, api_secret
 
 #########################################################
 
+from date_format import convert_date
 # setting up api keys
 pub = api_key
 priv = api_secret
@@ -21,10 +22,10 @@ from datetime import datetime
 
 time_res = client.get_server_time()
 
-print(
-    "server time:",
-    datetime.utcfromtimestamp(time_res["serverTime"] /
-                              1000).strftime("%Y-%m-%d %H:%M:%S"))
+serv = datetime.utcfromtimestamp(time_res["serverTime"] /
+                                 1000).strftime("%Y-%m-%d %H:%M:%S")
+
+print("server time:", convert_date(serv))
 
 # seeing if server is running
 status = client.get_system_status()

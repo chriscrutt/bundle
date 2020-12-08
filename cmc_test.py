@@ -4,7 +4,7 @@ from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
 from apis import cmc_key
-from temp_tests import convert_date
+from date_format import convert_date
 
 parameters = {
     "start": "1",
@@ -48,17 +48,3 @@ def get_coin_stats(coin, params: dict):
 
 
 get_coin_stats("BTC", parameters)
-
-# try:
-#     response = session.get(url, params=parameters)
-#     data = json.loads(response.text)
-#     print(
-
-#     print("name:", data["data"][15]["name"], "| price",
-#           data["data"][15]["quote"]["BTC"]["price"], "| 24 hour volume:",
-#           data["data"][15]["quote"]["BTC"]["volume_24h"], "| 7 day volume:",
-#           data["data"][15]["quote"]["BTC"]["volume_7d"], "| 30 day volume:",
-#           data["data"][15]["quote"]["BTC"]["volume_30d"], "| market cap:",
-#           data["data"][15]["quote"]["BTC"]["market_cap"])
-# except (ConnectionError, Timeout, TooManyRedirects) as e:
-#     print(e)

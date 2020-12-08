@@ -24,6 +24,8 @@ def convert_date(date):
         month = "November"
     elif date[5:7] == "12":
         month = "December"
+    else:
+        raise Exception("No month")
 
     if date[8] == 0:
         day = date[8]
@@ -43,4 +45,4 @@ def convert_date(date):
     if time[0] == "0":
         time = time[1:]
 
-    return f"Last updated at {time} on {month} {day}, {date[:4]}"
+    return f"last updated at {time} on {month} {day}, {date[:4]}"
