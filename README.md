@@ -13,7 +13,7 @@ We use fancy API technology oooh aaah and our functions are programmed by a 19 y
 3. either download the zip or clone this repo onto your computer
 4. do `$ pip install python-binance`
 
-### for binance_test.py
+### binance_test.py
 1. Delete the first 6 lines as they let the author/committers put API keys on a seperate file so y'all don't go hacking into our accounts
 2. replace `api_key` and `api_secret` on lines 12 & 13 with your... api keys from Binance
 
@@ -21,7 +21,7 @@ We use fancy API technology oooh aaah and our functions are programmed by a 19 y
 1. create a file called `apis.py`
 2. in the `apis.py` file, create variables `api_key` and `api_secret` and set them to your respective Binance keys
 
-### for cmc_test.py
+### cmc_test.py
 1. Delete the first 6 lines as they let the author/committers put API keys on a seperate file so y'all don't go hacking into our accounts
 2. replace `cmc_key` on line 19 with your... api key from CoinMarketCap
 
