@@ -29,5 +29,8 @@ We use fancy API technology oooh aaah and our functions are programmed by a 19 y
 1. create a file called `apis.py` (if not already created)
 2. in the `apis.py` file, create the variable `cmc_key` and set it to your CoinMarketCap api key
 
+## gecko_test.py
+1. They're friggen sick you don't even need an api everything is freeeeee
+
 ## Running
 Do `$ python /Path/to/bundle/binance_test.py` and/or `$ python /Path/to/bundle/cmc_test.py` to run the programs yay

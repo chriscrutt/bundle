@@ -33,18 +33,16 @@ def ping() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
         return e
 
-
-print("servers are:", ping()["gecko_says"])
+# prints the answer to all your hopes and dreams
+print("servers are:", ping()["gecko_says"], "\n")
 
 #########################################################
 
 
 # returns all the given coin's stats (the comment below is fixing a linting error)
-def info() -> Optional[int]:  # pylint: disable=E1136  # pylint/issues/3139
+def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     # url to the api
     url = "https://api.coingecko.com/api/v3/coins/markets"
-    # using a try-except for pulling api data
-
     # parameters to be pushed to the api
     params = {
         "vs_currency": "usd",
@@ -52,7 +50,7 @@ def info() -> Optional[int]:  # pylint: disable=E1136  # pylint/issues/3139
         "per_page": "3",
         "price_change_percentage": "1h,24h,7d,14d,30d,200d,1y"
     }
-
+    # using a try-except AGAIN for pulling api data
     try:
         # setting response to data received
         response = session.get(url, params=params)
@@ -63,8 +61,8 @@ def info() -> Optional[int]:  # pylint: disable=E1136  # pylint/issues/3139
     except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
         return e
 
-
-def take_info(info):
+# printing essential information for proof of concept
+def take_info(info: dict) -> None:
     for coin in info:
         print("name:", coin["name"], "\ncurrent price (usd):",
               coin["current_price"], "\nmarket cap:", coin["market_cap"],
