@@ -1,3 +1,32 @@
+# TODO
+
+## API stuff that the bot can currently do
+- [x] daily volume
+- [ ] weekly
+- [ ] bi-weekly
+- [ ] monthly
+- [ ] yearly (etc) volume? a mixture?
+- [x] Market capitalization?
+- [ ] Daily, monthly (etc) price/market cap change?
+
+## Questions to be answered
+- [ ] how many coins should we use?
+- [ ] What should a coin have to drop below in order to sell and switch to another?
+- [ ] should we invest in stablecoins?
+
+## Goals
+### Look at 2-3 funds:
+- [ ] Long term fund with biannual & yearly volume & Market Cap as focus
+- [ ] Medium Term Fund with coins being pulled from both Long Term Fund and Short Term Fund. Semi Aggressive with long term stability as well.
+- [ ] Short Term Fund/Aggressive Focus on Daily and monthly volume increase in Market Cap
+
+- [ ] ~~IntoTheBlock (for telegram stuff)~~ costs money
+
+- [ ] Amount of Shares/Tokens?
+- How many ETFs would we need to create - for example if we had a total of $1,000,000 (including liabilities I dont know doesn't matter for the example) in assets, if we had would we want to split it into 50,000 shares to make it ~$20 per etf (starting).
+- Look at overall supply to price
+
+
 # Bundle - your friggin cryptos
 
 ## Introduction
