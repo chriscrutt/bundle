@@ -104,6 +104,10 @@ def volume(range) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3
     except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
         return e
 
+
+voll = volume(365)
+
+
 def conglom_vol(vol_info: dict):
     range, vol = vol_info
     huge_vol = 0
@@ -111,6 +115,41 @@ def conglom_vol(vol_info: dict):
         huge_vol += big_num[1]
 
     huge_vol = "{:,d}".format(round(huge_vol))
-    print(f"over {range} days there has been a volume of ${huge_vol}")
+    print(f"over {range} days there has been a volume of ${huge_vol} traded")
 
-conglom_vol(volume(365))
+
+conglom_vol(voll)
+
+
+def conglom_cap(cap_info: dict):
+    range, cap = cap_info
+    old_cap = cap["market_caps"][0][1]
+    new_cap = cap["market_caps"][-1][1]
+    dif = new_cap - old_cap
+    percent = round(dif / old_cap * 10000) / 100
+
+    old_cap = "{:,d}".format(round(old_cap))
+    new_cap = "{:,d}".format(round(new_cap))
+    print(
+        f"over {range} days the market cap changed from ${old_cap} to ${new_cap} which is a change of {percent}%"
+    )
+
+
+conglom_cap(voll)
+
+
+def price_change(price_info: dict):
+    range, price = price_info
+    old_price = price["prices"][0][1]
+    new_price = price["prices"][-1][1]
+    dif = new_price - old_price
+    percent = round(dif / old_price * 10000) / 100
+
+    old_price = "{:,d}".format(round(old_price))
+    new_price = "{:,d}".format(round(new_price))
+    print(
+        f"over {range} days the price changed from ${old_price} to ${new_price} which is a change of {percent}%"
+    )
+
+
+price_change(voll)

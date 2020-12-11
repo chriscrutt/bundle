@@ -18,9 +18,9 @@
 - [x] servers status
 - [x] price
 - [x] market cap
-- [ ] volume (any time period)
-    - [x] volume (24h)
-- [ ] Daily, monthly (etc) price/market cap change?
+- [x] volume for any time range
+- [x] market cap change for any time range
+- [x] price change for any time range
 
 ## Questions to be answered
 - [ ] how many coins should we use?
