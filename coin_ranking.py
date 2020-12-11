@@ -31,7 +31,7 @@ def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     params = {
         "vs_currency": "usd",
         "order": "market_cap_desc",
-        "per_page": "40"
+        "per_page": "30"
     }
     # using a try-except for pulling api data
     try:
@@ -81,15 +81,17 @@ def volume(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issu
         # setting response to data received
         response = session.get(url, params=params)
         # making that data readable
+        print(response)
         data = json.loads(response.text)
         return data
     # if it fails to pull info from api, print why
-    except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
-        return e
+    except (ConnectionError, Timeout, TooManyRedirects, KeyError,
+            json.decoder.JSONDecodeError) as e:
+        return print(e)
 
 
-def conglom_vol(i, vol: List[dict]):
-
+def conglom_vol(vol: List[dict]):
+    i = 0
     while i < len(vol):
         yew = vol[i]["id"]
 
@@ -106,7 +108,36 @@ def conglom_vol(i, vol: List[dict]):
     return vol
 
 
-yew = conglom_vol(0, coin_sorter)
+yew = conglom_vol(coin_sorter)
+
+
+def conglom_cap(cap: dict):
+    i = 0
+    while i < len(cap):
+        yew = cap[i]["id"]
+
+        my_cap = volume(365, yew)
+        
+        old_cap = my_cap["market_caps"][0][1]
+        new_cap = my_cap["market_caps"][-1][1]
+        dif = new_cap - old_cap
+        try:
+            percent = round(dif / old_cap * 10000) / 100
+        except ZeroDivisionError:
+            j = 1
+            while my_cap["market_caps"][j][1] == 0:
+                j += 1
+            old_cap = my_cap["market_caps"][j][1]
+            percent = round(dif / old_cap * 10000) / 100
+
+        cap[i]["cap_percent_change"] = percent
+
+        i += 1
+
+    return cap
+
+
+yew = conglom_cap(coin_sorter)
 
 
 def vol_sort(e):
@@ -118,14 +149,23 @@ yew.sort(reverse=True, key=vol_sort)
 for i in range(len(yew)):
     yew[i]["volume_rank"] = i
 
-for i in range(len(yew)):
-    yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"]
 
+def cap_sort(e):
+    return e['cap_percent_change']
+
+
+yew.sort(reverse=True, key=cap_sort)
+
+for i in range(len(yew)):
+    yew[i]["cap_rank"] = i
+
+for i in range(len(yew)):
+    yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"] + yew[
+        i]["cap_rank"]
 
 def all_sort(e):
-    return e['volume_rank'] + e['market_cap_rank']
-
+    return e['rank']
 
 yew.sort(key=all_sort)
 
-print("\n", yew)
+print(yew)

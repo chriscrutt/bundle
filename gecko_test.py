@@ -79,16 +79,15 @@ take_info(info())
 #########################################################
 
 
-def volume(range) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
+def volume(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     # url to the api
-    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+    url = f"https://api.coingecko.com/api/v3/coins/{id}/market_chart/range"
 
     minus = 86400 * range
 
     # parameters to be pushed to the api
     cur_time = time()
     params = {
-        "id": "bitcoin",
         "vs_currency": "usd",
         "from": str(cur_time - minus),
         "to": str(cur_time)
@@ -105,7 +104,7 @@ def volume(range) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3
         return e
 
 
-voll = volume(365)
+voll = volume(365, "bitcoin")
 
 
 def conglom_vol(vol_info: dict):
