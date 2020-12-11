@@ -9,6 +9,7 @@
 - [x] pseudo market cap (ask and bid depth volume)
 
 ### CoinMarketCap
+- [x] server time
 - [x] price
 - [x] volume (up to 30 days)
 - [x] Market capitalization
@@ -35,4 +36,5 @@
     - [ ] How many ETFs would we need to create - for example if we had a total of $1,000,000 (including liabilities I dont know doesn't matter for the example) in assets, if we had would we want to split it into 50,000 shares to make it ~$20 per etf (starting).
     - [ ] Look at overall supply to price
 
-[check out this tut](https://github.com/chriscrutt/bundle/blob/main/tutorial.md)
+# Lastly
+[check out this not really a tutorial tutorial](https://github.com/chriscrutt/bundle/blob/main/tutorial.md)

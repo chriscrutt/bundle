@@ -8,9 +8,9 @@ We use fancy API technology oooh aaah and our functions are programmed by a 19 y
 
 ## Mini Tut
 ### Prerequisites
-1. get python 3 (git optional) - figure it out yourself
+1. get python 3 (I'm using 3.9.0) - figure out how yourself
 2. do `$ python --version` and if you see it's not python 3 then substitute `python` and `pip` with `python3` and `pip3` respectively
-3. either download the zip or clone this repo onto your computer
+3. either download the zip or clone this repo onto your computer (with git)
 4. do `$ pip install python-binance`
 
 ### binance_test.py

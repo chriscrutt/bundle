@@ -10,6 +10,9 @@ from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 # allows reading json outputs
 import json
 
+# imports... time stuff
+from time import time
+
 # header to be pushed to the api
 headers = {"Accepts": "application/json"}
 
@@ -32,6 +35,7 @@ def ping() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     # if it fails to pull info from api, print why
     except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
         return e
+
 
 # prints the answer to all your hopes and dreams
 print("servers are:", ping()["gecko_says"], "\n")
@@ -61,6 +65,7 @@ def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
         return e
 
+
 # printing essential information for proof of concept
 def take_info(info: dict) -> None:
     for coin in info:
@@ -70,3 +75,42 @@ def take_info(info: dict) -> None:
 
 
 take_info(info())
+
+#########################################################
+
+
+def volume(range) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
+    # url to the api
+    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+
+    minus = 86400 * range
+
+    # parameters to be pushed to the api
+    cur_time = time()
+    params = {
+        "id": "bitcoin",
+        "vs_currency": "usd",
+        "from": str(cur_time - minus),
+        "to": str(cur_time)
+    }
+    # using a try-except AGAIN for pulling api data
+    try:
+        # setting response to data received
+        response = session.get(url, params=params)
+        # making that data readable
+        data = json.loads(response.text)
+        return range, data
+    # if it fails to pull info from api, print why
+    except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
+        return e
+
+def conglom_vol(vol_info: dict):
+    range, vol = vol_info
+    huge_vol = 0
+    for big_num in vol["total_volumes"]:
+        huge_vol += big_num[1]
+
+    huge_vol = "{:,d}".format(round(huge_vol))
+    print(f"over {range} days there has been a volume of ${huge_vol}")
+
+conglom_vol(volume(365))
