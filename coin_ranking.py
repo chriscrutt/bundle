@@ -31,7 +31,7 @@ def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     params = {
         "vs_currency": "usd",
         "order": "market_cap_desc",
-        "per_page": "30"
+        "per_page": "59"
     }
     # using a try-except for pulling api data
     try:
@@ -63,7 +63,7 @@ use_info(info())
 # print(coin_sorter, "\n")
 
 
-def volume(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
+def big_data(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
     # url to the api
     url = f"https://api.coingecko.com/api/v3/coins/{id}/market_chart/range"
 
@@ -90,54 +90,44 @@ def volume(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issu
         return print(e)
 
 
-def conglom_vol(vol: List[dict]):
+def percent_cap(data):
+    old_cap = data["market_caps"][0][1]
+    new_cap = data["market_caps"][-1][1]
+    dif = new_cap - old_cap
+    try:
+        percent = round(dif / old_cap * 10000) / 100
+    except ZeroDivisionError:
+        j = 1
+        while data["market_caps"][j][1] == 0:
+            j += 1
+        old_cap = data["market_caps"][j][1]
+        percent = round(dif / old_cap * 10000) / 100
+
+    return percent
+
+def total_vol(data):
+    huge_vol = 0
+    for big_num in data["total_volumes"]:
+        huge_vol += big_num[1]
+
+    return huge_vol
+
+def conglom(condensed: dict):
     i = 0
-    while i < len(vol):
-        yew = vol[i]["id"]
+    while i < len(condensed):
+        yew = condensed[i]["id"]
+        my_dat = big_data(365, yew)
 
-        my_vol = volume(365, yew)
-
-        huge_vol = 0
-        for big_num in my_vol["total_volumes"]:
-            huge_vol += big_num[1]
-
-        vol[i]["volume"] = huge_vol
+        condensed[i]["cap_percent_change"] = percent_cap(my_dat)
+        condensed[i]["volume"] = total_vol(my_dat)
+        # add price change here
 
         i += 1
 
-    return vol
+    return condensed
 
 
-yew = conglom_vol(coin_sorter)
-
-
-def conglom_cap(cap: dict):
-    i = 0
-    while i < len(cap):
-        yew = cap[i]["id"]
-
-        my_cap = volume(365, yew)
-        
-        old_cap = my_cap["market_caps"][0][1]
-        new_cap = my_cap["market_caps"][-1][1]
-        dif = new_cap - old_cap
-        try:
-            percent = round(dif / old_cap * 10000) / 100
-        except ZeroDivisionError:
-            j = 1
-            while my_cap["market_caps"][j][1] == 0:
-                j += 1
-            old_cap = my_cap["market_caps"][j][1]
-            percent = round(dif / old_cap * 10000) / 100
-
-        cap[i]["cap_percent_change"] = percent
-
-        i += 1
-
-    return cap
-
-
-yew = conglom_cap(coin_sorter)
+yew = conglom(coin_sorter)
 
 
 def vol_sort(e):
