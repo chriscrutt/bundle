@@ -105,12 +105,30 @@ def percent_cap(data):
 
     return percent
 
+
+def percent_price(data):
+    old_price = data["prices"][0][1]
+    new_price = data["prices"][-1][1]
+    dif = new_price - old_price
+    try:
+        percent = round(dif / old_price * 10000) / 100
+    except ZeroDivisionError:
+        j = 1
+        while data["prices"][j][1] == 0:
+            j += 1
+        old_price = data["prices"][j][1]
+        percent = round(dif / old_price * 10000) / 100
+
+    return percent
+
+
 def total_vol(data):
     huge_vol = 0
     for big_num in data["total_volumes"]:
         huge_vol += big_num[1]
 
     return huge_vol
+
 
 def conglom(condensed: dict):
     i = 0
@@ -120,7 +138,7 @@ def conglom(condensed: dict):
 
         condensed[i]["cap_percent_change"] = percent_cap(my_dat)
         condensed[i]["volume"] = total_vol(my_dat)
-        # add price change here
+        condensed[i]["price_percent_change"] = percent_price(my_dat)
 
         i += 1
 
@@ -149,13 +167,46 @@ yew.sort(reverse=True, key=cap_sort)
 for i in range(len(yew)):
     yew[i]["cap_rank"] = i
 
+
+def price_sort(e):
+    return e['price_percent_change']
+
+
+yew.sort(reverse=True, key=price_sort)
+
 for i in range(len(yew)):
-    yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"] + yew[
-        i]["cap_rank"]
+    yew[i]["price_rank"] = i
+
+
+for i in range(len(yew)):
+    yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"] + yew[i]["cap_rank"] + yew[i]["price_rank"]
+
 
 def all_sort(e):
     return e['rank']
 
+
 yew.sort(key=all_sort)
 
-print(yew)
+for i in range(len(yew)):
+    yew[i]["reverse_rank"] = 1 / yew[i]["rank"]
+
+
+###############################################################################
+
+# print(yew)
+test = []
+
+for i in yew:
+    if i["volume_rank"] <= 30 and i["market_cap_rank"] <= 20 and i["cap_rank"] <= 40 and i["price_rank"] <= 40:
+        test.append(i)
+
+total = 0
+for i in range(len(test)):
+    total += test[i]["reverse_rank"]
+    
+for i in range(len(test)):
+    test[i]["percent_of_basket"] = test[i]["reverse_rank"] / total
+
+print(test)
+# print(yew)
