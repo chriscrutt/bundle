@@ -1,212 +1,218 @@
-# allows type hint "optional" incase of NoneType
-from typing import Optional, List
+def main():
 
-# allows the pulling of data from apis
-from requests import Session
+    # allows type hint "optional" incase of NoneType
+    from typing import Optional, List
 
-# exceptions for debugging from pulling data from apis
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+    # allows the pulling of data from apis
+    from requests import Session
 
-# allows reading json outputs
-import json
+    # exceptions for debugging from pulling data from apis
+    from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 
-# imports... time stuff
-from time import time
+    # allows reading json outputs
+    import json
 
-# header to be pushed to the api
-headers = {"Accepts": "application/json"}
+    # imports... time stuff
+    from time import time, sleep
 
-#creating a new session and giving it the above header
-session = Session()
-session.headers.update(headers)
+    # header to be pushed to the api
+    headers = {"Accepts": "application/json"}
 
-coin_sorter: List[dict] = []
+    #creating a new session and giving it the above header
+    session = Session()
+    session.headers.update(headers)
 
-
-# returns all the given coin's stats (the comment below is fixing a linting error)
-def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
-    # url to the api
-    url = "https://api.coingecko.com/api/v3/coins/markets"
-    # parameters to be pushed to the api
-    params = {
-        "vs_currency": "usd",
-        "order": "market_cap_desc",
-        "per_page": "59"
-    }
-    # using a try-except for pulling api data
-    try:
-        # setting response to data received
-        response = session.get(url, params=params)
-        # making that data readable
-        data = json.loads(response.text)
-        return data
-    # if it fails to pull info from api, print why
-    except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
-        return e
+    coin_sorter: List[dict] = []
 
 
-# print(info())
+    # returns all the given coin's stats (the comment below is fixing a linting error)
+    def info() -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
+        # url to the api
+        url = "https://api.coingecko.com/api/v3/coins/markets"
+        # parameters to be pushed to the api
+        params = {
+            "vs_currency": "usd",
+            "order": "market_cap_desc",
+            "per_page": "59"
+        }
+        # using a try-except for pulling api data
+        try:
+            # setting response to data received
+            response = session.get(url, params=params)
+            # making that data readable
+            data = json.loads(response.text)
+            return data
+        # if it fails to pull info from api, print why
+        except (ConnectionError, Timeout, TooManyRedirects, KeyError) as e:
+            return e
 
 
-def use_info(info):
-    for stuff in info:
-        coin_sorter.append({
-            "id": stuff["id"],
-            "name": stuff["name"],
-            "market_cap": stuff["market_cap"],
-            "market_cap_rank": stuff["market_cap_rank"] - 1
-        })
+    # print(info())
 
 
-# print(coin_sorter)
-use_info(info())
-# print(coin_sorter, "\n")
+    def use_info(info):
+        for stuff in info:
+            coin_sorter.append({
+                "id": stuff["id"],
+                "name": stuff["name"],
+                "market_cap": stuff["market_cap"],
+                "market_cap_rank": stuff["market_cap_rank"] - 1
+            })
 
 
-def big_data(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
-    # url to the api
-    url = f"https://api.coingecko.com/api/v3/coins/{id}/market_chart/range"
-
-    minus = 86400 * range
-
-    # parameters to be pushed to the api
-    cur_time = time()
-    params = {
-        "vs_currency": "usd",
-        "from": str(cur_time - minus),
-        "to": str(cur_time)
-    }
-    # using a try-except AGAIN for pulling api data
-    try:
-        # setting response to data received
-        response = session.get(url, params=params)
-        # making that data readable
-        print(response)
-        data = json.loads(response.text)
-        return data
-    # if it fails to pull info from api, print why
-    except (ConnectionError, Timeout, TooManyRedirects, KeyError,
-            json.decoder.JSONDecodeError) as e:
-        return print(e)
+    # print(coin_sorter)
+    use_info(info())
+    # print(coin_sorter, "\n")
 
 
-def percent_cap(data):
-    old_cap = data["market_caps"][0][1]
-    new_cap = data["market_caps"][-1][1]
-    dif = new_cap - old_cap
-    try:
-        percent = round(dif / old_cap * 10000) / 100
-    except ZeroDivisionError:
-        j = 1
-        while data["market_caps"][j][1] == 0:
-            j += 1
-        old_cap = data["market_caps"][j][1]
-        percent = round(dif / old_cap * 10000) / 100
+    def big_data(range, id) -> Optional[dict]:  # pylint: disable=E1136  # pylint/issues/3139
+        # url to the api
+        url = f"https://api.coingecko.com/api/v3/coins/{id}/market_chart/range"
 
-    return percent
+        minus = 86400 * range
 
-
-def percent_price(data):
-    old_price = data["prices"][0][1]
-    new_price = data["prices"][-1][1]
-    dif = new_price - old_price
-    try:
-        percent = round(dif / old_price * 10000) / 100
-    except ZeroDivisionError:
-        j = 1
-        while data["prices"][j][1] == 0:
-            j += 1
-        old_price = data["prices"][j][1]
-        percent = round(dif / old_price * 10000) / 100
-
-    return percent
+        # parameters to be pushed to the api
+        cur_time = time()
+        params = {
+            "vs_currency": "usd",
+            "from": str(cur_time - minus),
+            "to": str(cur_time)
+        }
+        # using a try-except AGAIN for pulling api data
+        try:
+            # setting response to data received
+            response = session.get(url, params=params)
+            # making that data readable
+            print(response)
+            data = json.loads(response.text)
+            return data
+        # if it fails to pull info from api, print why
+        except (ConnectionError, Timeout, TooManyRedirects, KeyError,
+                json.decoder.JSONDecodeError) as e:
+            return print(e)
 
 
-def total_vol(data):
-    huge_vol = 0
-    for big_num in data["total_volumes"]:
-        huge_vol += big_num[1]
+    def percent_cap(data):
+        old_cap = data["market_caps"][0][1]
+        new_cap = data["market_caps"][-1][1]
+        dif = new_cap - old_cap
+        try:
+            percent = round(dif / old_cap * 10000) / 100
+        except ZeroDivisionError:
+            j = 1
+            while data["market_caps"][j][1] == 0:
+                j += 1
+            old_cap = data["market_caps"][j][1]
+            percent = round(dif / old_cap * 10000) / 100
 
-    return huge_vol
-
-
-def conglom(condensed: dict):
-    i = 0
-    while i < len(condensed):
-        yew = condensed[i]["id"]
-        my_dat = big_data(365, yew)
-
-        condensed[i]["cap_percent_change"] = percent_cap(my_dat)
-        condensed[i]["volume"] = total_vol(my_dat)
-        condensed[i]["price_percent_change"] = percent_price(my_dat)
-
-        i += 1
-
-    return condensed
+        return percent
 
 
-yew = conglom(coin_sorter)
+    def percent_price(data):
+        old_price = data["prices"][0][1]
+        new_price = data["prices"][-1][1]
+        dif = new_price - old_price
+        try:
+            percent = round(dif / old_price * 10000) / 100
+        except ZeroDivisionError:
+            j = 1
+            while data["prices"][j][1] == 0:
+                j += 1
+            old_price = data["prices"][j][1]
+            percent = round(dif / old_price * 10000) / 100
+
+        return percent
 
 
-def vol_sort(e):
-    return e['volume']
+    def total_vol(data):
+        huge_vol = 0
+        for big_num in data["total_volumes"]:
+            huge_vol += big_num[1]
+
+        return huge_vol
 
 
-yew.sort(reverse=True, key=vol_sort)
+    def conglom(condensed: dict):
+        i = 0
+        sleep(60)
+        while i < len(condensed):
+            yew = condensed[i]["id"]
+            my_dat = big_data(365, yew)
+            condensed[i]["cap_percent_change"] = percent_cap(my_dat)
+            condensed[i]["volume"] = total_vol(my_dat)
+            condensed[i]["price_percent_change"] = percent_price(my_dat)
 
-for i in range(len(yew)):
-    yew[i]["volume_rank"] = i
+            i += 1
 
-
-def cap_sort(e):
-    return e['cap_percent_change']
-
-
-yew.sort(reverse=True, key=cap_sort)
-
-for i in range(len(yew)):
-    yew[i]["cap_rank"] = i
-
-
-def price_sort(e):
-    return e['price_percent_change']
+        return condensed
 
 
-yew.sort(reverse=True, key=price_sort)
-
-for i in range(len(yew)):
-    yew[i]["price_rank"] = i
+    yew = conglom(coin_sorter)
 
 
-for i in range(len(yew)):
-    yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"] + yew[i]["cap_rank"] + yew[i]["price_rank"]
+    def vol_sort(e):
+        return e['volume']
 
 
-def all_sort(e):
-    return e['rank']
+    yew.sort(reverse=True, key=vol_sort)
+
+    for i in range(len(yew)):
+        yew[i]["volume_rank"] = i
 
 
-yew.sort(key=all_sort)
-
-for i in range(len(yew)):
-    yew[i]["reverse_rank"] = 1 / yew[i]["rank"]
+    def cap_sort(e):
+        return e['cap_percent_change']
 
 
-###############################################################################
+    yew.sort(reverse=True, key=cap_sort)
 
-# print(yew)
-test = []
+    for i in range(len(yew)):
+        yew[i]["cap_rank"] = i
 
-for i in yew:
-    if i["volume_rank"] <= 30 and i["market_cap_rank"] <= 20 and i["cap_rank"] <= 40 and i["price_rank"] <= 40:
-        test.append(i)
 
-total = 0
-for i in range(len(test)):
-    total += test[i]["reverse_rank"]
-    
-for i in range(len(test)):
-    test[i]["percent_of_basket"] = test[i]["reverse_rank"] / total
+    def price_sort(e):
+        return e['price_percent_change']
 
-print(test)
-# print(yew)
+
+    yew.sort(reverse=True, key=price_sort)
+
+    for i in range(len(yew)):
+        yew[i]["price_rank"] = i
+
+
+    for i in range(len(yew)):
+        yew[i]["rank"] = yew[i]["volume_rank"] + yew[i]["market_cap_rank"] + yew[i]["cap_rank"] + yew[i]["price_rank"]
+
+
+    def all_sort(e):
+        return e['rank']
+
+
+    yew.sort(key=all_sort)
+
+    for i in range(len(yew)):
+        yew[i]["reverse_rank"] = 1 / yew[i]["rank"]
+
+
+    ###############################################################################
+
+    # print(yew)
+    test = []
+
+    for i in yew:
+        if i["volume_rank"] <= 30 and i["market_cap_rank"] <= 20 and i["cap_rank"] <= 40 and i["price_rank"] <= 40:
+            test.append(i)
+
+    total = 0
+    for i in range(len(test)):
+        total += test[i]["reverse_rank"]
+
+    for i in range(len(test)):
+        test[i]["percent_of_basket"] = test[i]["reverse_rank"] / total
+
+    print(test)
+    # print(yew)
+
+    return test
+
+main()
